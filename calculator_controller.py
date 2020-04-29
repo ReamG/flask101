@@ -4,7 +4,7 @@
 ###########################
 from http import HTTPStatus
 
-from flask import jsonify
+from flask import Flask, request, jsonify
 
 import service.calculator as calculator
 
@@ -26,9 +26,10 @@ app = Flask(__name__)
 
 # path = '/mean', method = 'GET'
 # request type = JSON
+@app.route('/mean', methods=['GET'])
 def mean():
 	# user_input = 
-	
+	user_input = request.get_json()['input']
 	results = calculator.mean(user_input)
 
 	return jsonify({'output':results}), HTTPStatus.OK
@@ -36,9 +37,10 @@ def mean():
 
 # path = '/median', method = 'GET and POST'
 # request type = Query
+@app.route('/median', methods=['GET','POST'])
 def median():
 	# user_input = 
-
+	user_input = request.args.get('input')
 	user_input = list(map(int, user_input.split(',')))
 	results = calculator.median(user_input)
 
@@ -46,9 +48,10 @@ def median():
 
 # path = '/mode', method = 'POST'
 # request type = Form
+@app.route('/mode', methods=['POST'])
 def mode():
 	# user_input = 
-
+	user_input = request.form.get('input')
 	user_input = list(map(int, user_input))
 	results = calculator.mode(user_input)
 
@@ -56,13 +59,24 @@ def mode():
 
 
 # path = '/status', method = 'GET'
+@app.route('/status', methods=['GET'])
 def status():
 	result = "Application is running"
 	return result, HTTPStatus.OK
 
+# Outputs list with two numbers, min and max of the list provided
+@app.route('/range', methods=['GET', 'POST'])
+def range():
+	user_input = request.args.get('input')
+	user_input = list(map(int, user_input.split(',')))
+	results = []
+	results.append(min(user_input))
+	results.append(max(user_input))
+	return jsonify({'output': results}), HTTPStatus.OK
 
 if __name__ == '__main__':
 	###########################
 	# 5. Start your flask app
 	# HINT: sample/explicit_application_object.py
 	###########################
+	app.run(host='0.0.0.0', port=8080)
