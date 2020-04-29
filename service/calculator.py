@@ -31,3 +31,11 @@ def mode(number_list):
 		mode_value = max(set(number_list), key=number_list.count)
 
 	return mode_value
+#
+# def range(number_list):
+# 	if len(number_list) == 0:
+# 		range_value = "No range found because list is empty"
+# 	else:
+# 		range_value = range(number_list)
+#
+# 	return range_value
